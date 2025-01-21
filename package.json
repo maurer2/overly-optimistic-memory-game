@@ -1,0 +1,49 @@
+{
+  "name": "overly-optimistic-memory-game",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "prepare": "panda codegen",
+    "dev": "next dev --turbopack",
+    "dev:no-cache": "rm -rf .next && next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@rollup/rollup-darwin-arm64": "^4.31.0",
+    "@rollup/rollup-darwin-x64": "^4.31.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.31.0",
+    "@testing-library/react": "^16.2.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.1",
+    "@types/node": "^22.10.7",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "eslint": "^9.18.0",
+    "eslint-config-next": "15.1.5",
+    "next": "15.1.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.21.0",
+    "@pandacss/dev": "^0.51.1"
+  },
+  "imports": {
+    "#src/*": "./src/*",
+    "#src/app": "./src/app/*",
+    "#src/components": "./src/components/*"
+  },
+  "pnpm": {
+    "supportedArchitectures": {
+      "cpu": [
+        "x64",
+        "arm64"
+      ],
+      "os": [
+        "linux",
+        "darwin"
+      ]
+    }
+  }
+}
