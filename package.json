@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.2.0",
+    "@pandacss/dev": "^0.51.1",
     "@rollup/rollup-darwin-arm64": "^4.31.0",
     "@rollup/rollup-darwin-x64": "^4.31.0",
     "@rollup/rollup-linux-x64-gnu": "^4.31.0",
@@ -22,12 +23,13 @@
     "@types/react-dom": "^19.0.3",
     "eslint": "^9.18.0",
     "eslint-config-next": "15.1.5",
+    "lucide-react": "^0.473.0",
     "next": "15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-error-boundary": "^5.0.0",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.21.0",
-    "@pandacss/dev": "^0.51.1"
+    "typescript-eslint": "^8.21.0"
   },
   "imports": {
     "#src/*": "./src/*",
