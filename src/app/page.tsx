@@ -1,28 +1,34 @@
 import { css } from '../../styled-system/css';
 import Card from '../components/Card';
-import { ErrorBoundary } from 'react-error-boundary';
 
 const container = css({
-  fontSize: '2rem',
-  padding: '1rem',
+  padding: '2.5rem',
 });
 
 const list = css({
-  display: 'flex',
-  flexWrap: 'wrap',
+  display: 'grid',
+  gap: '2.5rem',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(8.5rem, 1fr))',
+
+  '& > li': {
+    display: 'contents',
+  },
 });
 
 export default function Home() {
   return (
     <main className={container}>
-      <h1>Test</h1>
-
       <ul className={list}>
-        <li>
-          <ErrorBoundary fallback={<p>Something went wrong</p>}>
-            <Card name="box" />
-          </ErrorBoundary>
-        </li>
+        {Array.from({ length: 12 }, (_, index) => (
+          <>
+            <li key={`${index}-a`}>
+              <Card name="box" />
+            </li>
+            <li key={`${index}-b`}>
+              <Card name="minus" />
+            </li>
+          </>
+        ))}
       </ul>
     </main>
   );
