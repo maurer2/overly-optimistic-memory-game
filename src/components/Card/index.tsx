@@ -14,6 +14,7 @@ const card = css({
   transform: 'scale(1)',
   aspectRatio: '1 / 1',
   border: 'var(--indian-red) 4px solid',
+  marginTop: '2.5rem',
   padding: '1.25rem',
   color: 'var(--indian-red)',
   opacity: 1,

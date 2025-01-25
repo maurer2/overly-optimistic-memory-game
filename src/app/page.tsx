@@ -1,5 +1,6 @@
 import { css } from '../../styled-system/css';
 import Card from '../components/Card';
+import FormWrapper from '../components/FormWrapper';
 import handleFormSubmit from './sever-functions/handle-form-submit/handle-form-submit';
 
 const container = css({
@@ -17,33 +18,25 @@ const list = css({
   },
 });
 
-const button = css({
-  border: '4px solid currentColor',
-  padding: '0.625rem 1.25rem',
-  color: 'var(--indian-red)',
-  cursor: 'pointer',
-});
-
 export default function Home() {
   return (
     <main className={container}>
-      <form aria-label="Memory cards" action={handleFormSubmit}>
-        <ul className={list}>
-          {Array.from({ length: 12 }, (_, index) => (
-            <>
-              <li key={`${index}-a`}>
-                <Card name="box" />
-              </li>
-              <li key={`${index}-b`}>
-                <Card name="minus" />
-              </li>
-            </>
-          ))}
-        </ul>
-        <button className={button} type="submit">
-          Submit
-        </button>
-      </form>
+      <FormWrapper />
+
+      <hr />
+
+      <ul className={list}>
+        {Array.from({ length: 12 }, (_, index) => (
+          <>
+            <li key={`${index}-a`}>
+              <Card name="box" />
+            </li>
+            <li key={`${index}-b`}>
+              <Card name="minus" />
+            </li>
+          </>
+        ))}
+      </ul>
     </main>
   );
 }
