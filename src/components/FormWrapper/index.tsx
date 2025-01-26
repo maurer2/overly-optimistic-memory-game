@@ -2,7 +2,7 @@
 
 import { css } from '../../../styled-system/css';
 import handleFormSubmit from '../../app/sever-functions/handle-form-submit/handle-form-submit';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 
 const form = css({
   display: 'grid',
@@ -13,6 +13,11 @@ const form = css({
   '&[inert]': {
     opacity: 0.5,
   },
+});
+
+const label = css({
+  display: 'flex',
+  gap: '0.65rem',
 });
 
 const button = css({
@@ -27,32 +32,58 @@ const button = css({
   cursor: 'pointer',
 });
 
-type FormState2 = {
+type CardName = `test${number}`;
+
+type FormState = {
   score: number;
-  revealedCards: `test${number}`[];
-  selectedCards: [`test${number}`, `test${number}`];
+  revealedCards: CardName[];
+  selectedCards: never[] | [CardName, CardName];
 };
 
-type FormState = Record<`test${number}`, 'on'>;
+type WithMaybeError<T> = T & {
+  errorMessage?: string;
+};
+
+const items: CardName[] = [
+  'test1',
+  'test2',
+  'test3',
+  'test4',
+  'test5',
+  'test6',
+  'test7',
+  'test8',
+  'test9',
+  'test10',
+  'test11',
+  'test12',
+];
+
 const initialState: FormState = {
-  test1: 'on',
-  test3: 'on',
+  score: 0,
+  revealedCards: ['test1', 'test2', 'test8'],
+  selectedCards: [],
 };
 
-const submitAction = async (prevState: FormState, formData: FormData): Promise<FormState> => {
+const submitAction = async (
+  prevState: WithMaybeError<FormState>,
+  formData: FormData,
+): Promise<WithMaybeError<FormState>> => {
   const { promise, resolve } = Promise.withResolvers<FormState>();
 
-  const checkedFields = Array.from(formData.keys()) as `test${number}`[];
-
-  // handleFormSubmit(formData);
-
-  console.log('prevState', prevState);
-
-  const newState = Object.fromEntries(
-    checkedFields.map((field) => [field, 'on']),
-  ) satisfies FormState;
-
   setTimeout(() => {
+    const checkedFields = Array.from(formData.keys()) as CardName[];
+    const selectedCards: never[] = [];
+
+    const newState = {
+      score: 0,
+      revealedCards: checkedFields,
+      selectedCards,
+      // ...(!selectedCards.length && { errorMessage: 'No new cards selected' }),
+    } satisfies WithMaybeError<FormState>;
+
+    console.log(formData);
+
     resolve(newState);
   }, 1500);
 
@@ -60,31 +91,35 @@ const submitAction = async (prevState: FormState, formData: FormData): Promise<F
 };
 
 export default function FormWrapper() {
-  const [state, formAction, isPending] = useActionState<FormState, FormData>(
+  const [state, formAction, isPending] = useActionState<WithMaybeError<FormState>, FormData>(
     submitAction,
     initialState,
   );
+  const [selectedCards, setSelectedCards] = useState<CardName[]>([]);
+
+  const hasSelectedTwoCards = selectedCards.length === 2;
+  const hasError = Object.hasOwn(state, 'errorMessage') && state.errorMessage !== undefined;
 
   return (
     <>
-      <pre>{JSON.stringify(state)}</pre>
+      <pre>{JSON.stringify(state, null, 4)}</pre>
       <form aria-label="Test form" action={formAction} className={form} inert={isPending}>
-        <label>
-          <input type="checkbox" name="test1" defaultChecked={state['test1'] === 'on'} />
-          <span>Test1</span>
-        </label>
-        <label>
-          <input type="checkbox" name="test2" defaultChecked={state['test2'] === 'on'} />
-          <span>Test2</span>
-        </label>
-        <label>
-          <input type="checkbox" name="test3" defaultChecked={state['test3'] === 'on'} />
-          <span>Test3</span>
-        </label>
-        <label>
-          <input type="checkbox" name="test4" defaultChecked={state['test4'] === 'on'} />
-          <span>Test4</span>
-        </label>
+        {items.map((item) => {
+          const isRevealed = state.revealedCards.includes(item);
+
+          return (
+            <label key={item} className={label}>
+              <input
+                type={isRevealed ? 'radio' : 'checkbox'}
+                name={item}
+                defaultChecked={isRevealed}
+              />
+              <span>{item}</span>
+            </label>
+          );
+        })}
+
+        {hasError ? <p role="alert">{state.errorMessage}</p> : null}
 
         <button className={button} type="submit">
           Submit
