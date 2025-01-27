@@ -40,7 +40,7 @@ type FormState = {
   selectedCards: CardName[];
 };
 
-type WithMaybeError<T> = T & {
+type MaybeWithError<T> = T & {
   errorMessage?: string;
 };
 
@@ -67,9 +67,9 @@ const initialState: FormState = {
 
 const submitAction = async (
   selectedCards: FormState['selectedCards'],
-  prevState: WithMaybeError<FormState>,
+  prevState: MaybeWithError<FormState>,
   formData: FormData,
-): Promise<WithMaybeError<FormState>> => {
+): Promise<MaybeWithError<FormState>> => {
   const { promise, resolve } = Promise.withResolvers<FormState>();
 
   setTimeout(() => {
@@ -80,7 +80,7 @@ const submitAction = async (
       revealedCards,
       selectedCards,
       ...(selectedCards.length !== 2 && { errorMessage: 'Two cards need to be selected' }),
-    } satisfies WithMaybeError<FormState>;
+    } satisfies MaybeWithError<FormState>;
 
     console.log(formData);
 
@@ -94,10 +94,10 @@ export default function FormWrapper() {
   const [selectedCards, setSelectedCards] = useState<CardName[]>(['test11', 'test12']);
   // const [selectedCards, setSelectedCards] = useState<CardName[]>([]);
 
-  const submitActionWithAdditionalParams = submitAction.bind(null, selectedCards);
+  const submitActionWithSelectedCards = submitAction.bind(null, selectedCards);
 
-  const [state, formAction, isPending] = useActionState<WithMaybeError<FormState>, FormData>(
-    submitActionWithAdditionalParams,
+  const [state, formAction, isPending] = useActionState<MaybeWithError<FormState>, FormData>(
+    submitActionWithSelectedCards,
     initialState,
   );
 
