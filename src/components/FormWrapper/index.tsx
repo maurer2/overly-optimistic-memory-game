@@ -37,7 +37,7 @@ type CardName = `test${number}`;
 type FormState = {
   score: number;
   revealedCards: CardName[];
-  selectedCards: never[] | [CardName, CardName];
+  selectedCards: CardName[];
 };
 
 type WithMaybeError<T> = T & {
@@ -66,20 +66,20 @@ const initialState: FormState = {
 };
 
 const submitAction = async (
+  selectedCards: FormState['selectedCards'],
   prevState: WithMaybeError<FormState>,
   formData: FormData,
 ): Promise<WithMaybeError<FormState>> => {
   const { promise, resolve } = Promise.withResolvers<FormState>();
 
   setTimeout(() => {
-    const checkedFields = Array.from(formData.keys()) as CardName[];
-    const selectedCards: never[] = [];
+    const revealedCards = Array.from(formData.keys()) as FormState['revealedCards'];
 
     const newState = {
       score: 0,
-      revealedCards: checkedFields,
+      revealedCards,
       selectedCards,
-      // ...(!selectedCards.length && { errorMessage: 'No new cards selected' }),
+      ...(selectedCards.length !== 2 && { errorMessage: 'Two cards need to be selected' }),
     } satisfies WithMaybeError<FormState>;
 
     console.log(formData);
@@ -91,13 +91,16 @@ const submitAction = async (
 };
 
 export default function FormWrapper() {
+  const [selectedCards, setSelectedCards] = useState<CardName[]>(['test11', 'test12']);
+  // const [selectedCards, setSelectedCards] = useState<CardName[]>([]);
+
+  const submitActionWithAdditionalParams = submitAction.bind(null, selectedCards);
+
   const [state, formAction, isPending] = useActionState<WithMaybeError<FormState>, FormData>(
-    submitAction,
+    submitActionWithAdditionalParams,
     initialState,
   );
-  const [selectedCards, setSelectedCards] = useState<CardName[]>([]);
 
-  const hasSelectedTwoCards = selectedCards.length === 2;
   const hasError = Object.hasOwn(state, 'errorMessage') && state.errorMessage !== undefined;
 
   return (
