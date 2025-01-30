@@ -1,7 +1,7 @@
 @layer reset, base, tokens, recipes, utilities;
 
 :root {
-  --indian-red: #db5461ff;
+  --iron-oxide-red: #db5461ff;
   --pale-dogwood: #ffd9ceff;
   --rebecca-purple: #593c8fff;
   --ice-blue: #8ef9f3ff;

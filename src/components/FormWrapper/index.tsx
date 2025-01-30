@@ -25,12 +25,12 @@ const cardButton = css({
   border: '1px solid currentColor',
   width: 'fit-content',
   padding: '0.25lh 0.5lh',
-  color: 'var(--indian-red)',
+  color: 'var(--iron-oxide-red)',
   cursor: 'pointer',
 
   '&[aria-pressed="true"]': {
     color: 'var(--space-cadet)',
-    backgroundColor: 'var(--indian-red)',
+    backgroundColor: 'var(--iron-oxide-red)',
   },
 });
 
@@ -41,7 +41,7 @@ const submitButton = css({
   marginTop: '2.5rem',
   marginBottom: '2.5rem',
   padding: '0.5lh 1lh',
-  color: 'var(--indian-red)',
+  color: 'var(--iron-oxide-red)',
   fontWeight: 'bold',
   cursor: 'pointer',
 });

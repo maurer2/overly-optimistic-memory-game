@@ -13,10 +13,10 @@ type CardProps = {
 const card = css({
   transform: 'scale(1)',
   aspectRatio: '1 / 1',
-  border: 'var(--indian-red) 4px solid',
+  border: 'var(--iron-oxide-red) 4px solid',
   marginTop: '2.5rem',
   padding: '1.25rem',
-  color: 'var(--indian-red)',
+  color: 'var(--iron-oxide-red)',
   opacity: 1,
   transition: 'transform 0.25s ease-in-out, opacity 0.25s ease-in-out',
   cursor: 'pointer',
@@ -25,7 +25,7 @@ const card = css({
     outline: 'none',
     color: 'var(--space-cadet)',
     backgroundClip: 'content-box',
-    backgroundColor: 'rgb(from var(--indian-red) r g b / 85%)',
+    backgroundColor: 'rgb(from var(--iron-oxide-red) r g b / 85%)',
   },
 
   '@starting-style': {
