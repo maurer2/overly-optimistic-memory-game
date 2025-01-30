@@ -71,29 +71,6 @@ const initialState: FormState = {
   selectedCards: [],
 };
 
-const submitAction = async (
-  selectedCards: FormState['selectedCards'],
-  prevState: MaybeWithError<FormState>,
-  formData: FormData,
-): Promise<MaybeWithError<FormState>> => {
-  const { promise, resolve } = Promise.withResolvers<FormState>();
-
-  setTimeout(() => {
-    const revealedCards = Array.from(formData.keys()) as FormState['revealedCards'];
-
-    const newState = {
-      score: 0,
-      revealedCards,
-      selectedCards,
-      ...(selectedCards.length !== 2 && { errorMessage: 'Two cards need to be selected' }),
-    } satisfies MaybeWithError<FormState>;
-
-    resolve(newState);
-  }, 1500);
-
-  return promise;
-};
-
 export default function FormWrapper() {
   // const [selectedCards, setSelectedCards] = useState<CardName[]>([]);
   const [selectedCards, setSelectedCards] = useReducer(
@@ -113,15 +90,16 @@ export default function FormWrapper() {
           }
           return currentState.filter((currentCard) => currentCard !== card);
         }
-        default:
+        default: {
           return currentState;
+        }
       }
     },
     [],
   );
 
   const [state, formAction, isPending] = useActionState<MaybeWithError<FormState>, FormData>(
-    submitAction.bind(null, selectedCards),
+    handleFormSubmit.bind(null, selectedCards),
     initialState,
   );
 
@@ -140,7 +118,7 @@ export default function FormWrapper() {
             <Fragment key={item}>
               {isRevealed ? (
                 <label className={cardLabel}>
-                  <input type="radio" name={item} defaultChecked={isRevealed} />
+                  <input type="radio" name={item} defaultChecked />
                   <span>{item}</span>
                 </label>
               ) : (
