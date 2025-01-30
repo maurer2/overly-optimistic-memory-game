@@ -2,7 +2,7 @@
 
 import { css } from '../../../styled-system/css';
 import handleFormSubmit from '../../app/sever-functions/handle-form-submit/handle-form-submit';
-import { useActionState, useState } from 'react';
+import { useActionState, useState, Fragment, useReducer } from 'react';
 
 const form = css({
   display: 'grid',
@@ -15,12 +15,26 @@ const form = css({
   },
 });
 
-const label = css({
+const cardLabel = css({
   display: 'flex',
   gap: '0.65rem',
 });
 
-const button = css({
+const cardButton = css({
+  display: 'block',
+  border: '1px solid currentColor',
+  width: 'fit-content',
+  padding: '0.25lh 0.5lh',
+  color: 'var(--indian-red)',
+  cursor: 'pointer',
+
+  '&[aria-pressed="true"]': {
+    color: 'var(--space-cadet)',
+    backgroundColor: 'var(--indian-red)',
+  },
+});
+
+const submitButton = css({
   display: 'block',
   border: '4px solid currentColor',
   width: 'fit-content',
@@ -44,24 +58,16 @@ type MaybeWithError<T> = T & {
   errorMessage?: string;
 };
 
-const items: CardName[] = [
-  'test1',
-  'test2',
-  'test3',
-  'test4',
-  'test5',
-  'test6',
-  'test7',
-  'test8',
-  'test9',
-  'test10',
-  'test11',
-  'test12',
-];
+type CardClickAction =
+  | { type: 'ADD_CARD'; card: CardName }
+  | { type: 'REMOVE_CARD'; card: CardName };
+
+// prettier-ignore
+const items: CardName[] = ['test1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test7', 'test8', 'test9', 'test10', 'test11', 'test12'];
 
 const initialState: FormState = {
   score: 0,
-  revealedCards: ['test1', 'test2', 'test8'],
+  revealedCards: ['test1', 'test2', 'test8', 'test12'],
   selectedCards: [],
 };
 
@@ -82,8 +88,6 @@ const submitAction = async (
       ...(selectedCards.length !== 2 && { errorMessage: 'Two cards need to be selected' }),
     } satisfies MaybeWithError<FormState>;
 
-    console.log(formData);
-
     resolve(newState);
   }, 1500);
 
@@ -91,40 +95,76 @@ const submitAction = async (
 };
 
 export default function FormWrapper() {
-  const [selectedCards, setSelectedCards] = useState<CardName[]>(['test11', 'test12']);
   // const [selectedCards, setSelectedCards] = useState<CardName[]>([]);
+  const [selectedCards, setSelectedCards] = useReducer(
+    (currentState: CardName[], action: CardClickAction) => {
+      const { card, type } = action;
 
-  const submitActionWithSelectedCards = submitAction.bind(null, selectedCards);
+      switch (type) {
+        case 'ADD_CARD': {
+          if (currentState.length >= 2) {
+            return currentState;
+          }
+          return [...currentState, card];
+        }
+        case 'REMOVE_CARD': {
+          if (!currentState.length) {
+            return [];
+          }
+          return currentState.filter((currentCard) => currentCard !== card);
+        }
+        default:
+          return currentState;
+      }
+    },
+    [],
+  );
 
   const [state, formAction, isPending] = useActionState<MaybeWithError<FormState>, FormData>(
-    submitActionWithSelectedCards,
+    submitAction.bind(null, selectedCards),
     initialState,
   );
 
   const hasError = Object.hasOwn(state, 'errorMessage') && state.errorMessage !== undefined;
+  const hasMaxSelectedCards = selectedCards.length >= 2;
 
   return (
     <>
       <pre>{JSON.stringify(state, null, 4)}</pre>
-      <form aria-label="Test form" action={formAction} className={form} inert={isPending}>
+      <form aria-label="Logic test form" action={formAction} className={form} inert={isPending}>
         {items.map((item) => {
           const isRevealed = state.revealedCards.includes(item);
+          const isSelected = selectedCards.includes(item);
 
           return (
-            <label key={item} className={label}>
-              <input
-                type={isRevealed ? 'radio' : 'checkbox'}
-                name={item}
-                defaultChecked={isRevealed}
-              />
-              <span>{item}</span>
-            </label>
+            <Fragment key={item}>
+              {isRevealed ? (
+                <label className={cardLabel}>
+                  <input type="radio" name={item} defaultChecked={isRevealed} />
+                  <span>{item}</span>
+                </label>
+              ) : (
+                <button
+                  type="button"
+                  name={item}
+                  className={cardButton}
+                  aria-pressed={isSelected}
+                  onClick={() =>
+                    isSelected
+                      ? setSelectedCards({ type: 'REMOVE_CARD', card: item })
+                      : setSelectedCards({ type: 'ADD_CARD', card: item })
+                  }
+                >
+                  {item}
+                </button>
+              )}
+            </Fragment>
           );
         })}
 
         {hasError ? <p role="alert">{state.errorMessage}</p> : null}
 
-        <button className={button} type="submit">
+        <button className={submitButton} type="submit">
           Submit
         </button>
       </form>
