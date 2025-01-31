@@ -1,14 +1,14 @@
 'use server';
 
-type CardName = `test${number}`;
+export type CardName = `test${number}`;
 
-type FormState = {
+export type FormState = {
   score: number;
   revealedCards: CardName[];
   selectedCards: CardName[];
 };
 
-type MaybeWithError<T> = T & {
+export type MaybeWithError<T> = T & {
   errorMessage?: string;
 };
 

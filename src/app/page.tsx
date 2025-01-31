@@ -1,12 +1,11 @@
 import Card from '../components/Card';
-import FormWrapper from '../components/FormWrapper';
-import handleFormSubmit from './sever-functions/handle-form-submit/handle-form-submit';
+import FormContainer from '../components/FormContainer';
 import { container, list } from './styles';
 
 export default function Home() {
   return (
     <main className={container}>
-      <FormWrapper />
+      <FormContainer />
 
       <hr />
 
