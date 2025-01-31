@@ -2,7 +2,7 @@
 
 import { css } from '../../../styled-system/css';
 import handleFormSubmit from '../../app/sever-functions/handle-form-submit/handle-form-submit';
-import { useActionState, useState, Fragment, useReducer } from 'react';
+import { useActionState, Fragment, useReducer, useEffect } from 'react';
 
 const form = css({
   display: 'grid',
@@ -60,7 +60,8 @@ type MaybeWithError<T> = T & {
 
 type CardClickAction =
   | { type: 'ADD_CARD'; card: CardName }
-  | { type: 'REMOVE_CARD'; card: CardName };
+  | { type: 'REMOVE_CARD'; card: CardName }
+  | { type: 'SET_CARDS'; card: CardName[] };
 
 // prettier-ignore
 const items: CardName[] = ['test1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test7', 'test8', 'test9', 'test10', 'test11', 'test12'];
@@ -72,7 +73,6 @@ const initialState: FormState = {
 };
 
 export default function FormWrapper() {
-  // const [selectedCards, setSelectedCards] = useState<CardName[]>([]);
   const [selectedCards, setSelectedCards] = useReducer(
     (currentState: CardName[], action: CardClickAction) => {
       const { card, type } = action;
@@ -90,12 +90,15 @@ export default function FormWrapper() {
           }
           return currentState.filter((currentCard) => currentCard !== card);
         }
+        case 'SET_CARDS': {
+          return card;
+        }
         default: {
           return currentState;
         }
       }
     },
-    [],
+    initialState.selectedCards,
   );
 
   const [state, formAction, isPending] = useActionState<MaybeWithError<FormState>, FormData>(
@@ -103,8 +106,12 @@ export default function FormWrapper() {
     initialState,
   );
 
+  // todo: replace with selectedCards as key in parent component
+  useEffect(() => {
+    setSelectedCards({ type: 'SET_CARDS', card: state.selectedCards });
+  }, [state]);
+
   const hasError = Object.hasOwn(state, 'errorMessage') && state.errorMessage !== undefined;
-  const hasMaxSelectedCards = selectedCards.length >= 2;
 
   return (
     <>
