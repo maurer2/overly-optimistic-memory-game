@@ -1,22 +1,7 @@
-import { css } from '../../styled-system/css';
 import Card from '../components/Card';
 import FormWrapper from '../components/FormWrapper';
 import handleFormSubmit from './sever-functions/handle-form-submit/handle-form-submit';
-
-const container = css({
-  padding: '2.5rem',
-});
-
-const list = css({
-  display: 'grid',
-  gap: '2.5rem',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(8.5rem, 1fr))',
-  marginBottom: '2.5rem',
-
-  '& > li': {
-    display: 'contents',
-  },
-});
+import { container, list } from './styles';
 
 export default function Home() {
   return (
