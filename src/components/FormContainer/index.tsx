@@ -38,7 +38,7 @@ export default function FormContainer() {
           return card;
         }
         default: {
-          return currentState;
+          return action satisfies never;
         }
       }
     },

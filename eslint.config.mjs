@@ -11,6 +11,7 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
+/** @type { import("eslint").Linter.Config[] } */
 const configList = tseslint.config(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
@@ -18,6 +19,7 @@ const configList = tseslint.config(
   {
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/switch-exhaustiveness-check': 'error',
     },
   },
   {
@@ -29,5 +31,4 @@ const configList = tseslint.config(
   },
 );
 
-/** @type { import("eslint").Linter.Config[] } */
 export default configList;
