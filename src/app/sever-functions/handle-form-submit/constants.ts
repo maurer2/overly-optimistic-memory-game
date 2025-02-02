@@ -1,4 +1,4 @@
-import type { FormState, CardName } from './handle-form-submit';
+import type { CardName, FormState } from './handle-form-submit';
 
 export const initialState: FormState = {
   score: 0,

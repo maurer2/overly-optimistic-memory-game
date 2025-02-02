@@ -1,7 +1,9 @@
+import { icons } from '../services/get-cards';
+
 import Card from '../components/Card';
 import FormContainer from '../components/FormContainer';
+
 import { container, list } from './styles';
-import { icons } from '../services/get-cards';
 
 export default function Home() {
   console.log(icons);

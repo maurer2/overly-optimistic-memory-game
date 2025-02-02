@@ -1,13 +1,15 @@
 'use client';
 
 import { Fragment } from 'react';
-import { form, cardLabel, cardButton, submitButton } from './styles';
+
+import { items } from '../../app/sever-functions/handle-form-submit/constants';
 import type {
+  CardName,
   FormState,
   MaybeWithError,
-  CardName,
 } from '../../app/sever-functions/handle-form-submit/handle-form-submit';
-import { items } from '../../app/sever-functions/handle-form-submit/constants';
+
+import { cardButton, cardLabel, form, submitButton } from './styles';
 
 type FormInnerProps = {
   formState: MaybeWithError<FormState>;

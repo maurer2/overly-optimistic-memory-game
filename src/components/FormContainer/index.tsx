@@ -1,14 +1,15 @@
 'use client';
 
-import { useActionState, useReducer, useEffect, useCallback } from 'react';
-import handleFormSubmit from '../../app/sever-functions/handle-form-submit/handle-form-submit';
-import FormInner from '../FormInner';
-import type {
-  FormState,
-  MaybeWithError,
-  CardName,
-} from '../../app/sever-functions/handle-form-submit/handle-form-submit';
+import { useActionState, useCallback, useEffect, useReducer } from 'react';
+
 import { initialState } from '../../app/sever-functions/handle-form-submit/constants';
+import handleFormSubmit, {
+  type CardName,
+  type FormState,
+  type MaybeWithError,
+} from '../../app/sever-functions/handle-form-submit/handle-form-submit';
+
+import FormInner from '../FormInner';
 
 type CardClickAction =
   | { type: 'ADD_CARD'; card: CardName }

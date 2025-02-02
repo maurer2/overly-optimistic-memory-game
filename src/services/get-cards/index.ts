@@ -1,5 +1,5 @@
-import type { dynamicIconImports } from 'lucide-react/dynamic';
 import { createHash } from 'node:crypto';
+import type { dynamicIconImports } from 'lucide-react/dynamic';
 
 type Hashes = [hashA: string, hashB: string];
 

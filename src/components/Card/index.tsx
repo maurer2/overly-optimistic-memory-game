@@ -1,8 +1,9 @@
 'use client';
 
+import React from 'react';
 import { RectangleEllipsis } from 'lucide-react';
 import { DynamicIcon, type dynamicIconImports } from 'lucide-react/dynamic';
-import React from 'react';
+
 import { card, icon } from './styles';
 
 type CardProps = {
